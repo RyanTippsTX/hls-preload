@@ -299,3 +299,114 @@ Files prefixed with `demo` can be safely deleted. They are there to provide a st
 # Learn More
 
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+
+# HLS Preloading Demo
+
+A demonstration of HLS (HTTP Live Streaming) preloading to improve video playback performance. This demo compares video startup times between a preloaded HLS stream and a regular HLS stream.
+
+## Features
+
+- **Real-time HLS Preloading**: Automatically starts loading HLS segments as soon as a URL is entered
+- **Side-by-side Comparison**: Two video players showing the difference between preloaded and regular playback
+- **Progress Tracking**: Visual progress indicator showing preloading status
+- **Performance Metrics**: Timing comparison between the two players
+- **Sample Streams**: Pre-configured public HLS test streams
+
+## How It Works
+
+1. **URL Input**: Enter an HLS stream URL in the input field
+2. **Automatic Preloading**: The system immediately starts preloading HLS segments in the background
+3. **Progress Monitoring**: Watch the progress bar as segments are loaded
+4. **Playback Comparison**: Click "Play Videos" to start both players simultaneously
+5. **Performance Analysis**: Compare startup times and buffering behavior
+
+## Sample HLS Streams
+
+The demo includes several public test streams:
+
+- **Mux Test Stream**: `https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8`
+- **Sintel Movie (Akamai)**: `https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8`
+- **Tears of Steel (Unified Streaming)**: `https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8`
+
+## Technical Implementation
+
+### HLS Preloading Hook (`useHlsPreload`)
+- Manages HLS.js instance lifecycle
+- Tracks segment loading progress
+- Handles error states and cleanup
+- Provides preloaded HLS instance for video players
+
+### Video Player Component
+- Supports both preloaded and regular HLS playback
+- Handles video element lifecycle
+- Provides error handling and loading states
+- Tracks playback timing for comparison
+
+### Key Technologies
+- **HLS.js**: JavaScript library for HLS playback
+- **React**: UI framework with custom hooks
+- **TanStack Router**: File-based routing
+- **Tailwind CSS**: Styling and responsive design
+
+## Getting Started
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Start Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Open Browser**: Navigate to `http://localhost:3000`
+
+4. **Test the Demo**:
+   - Enter an HLS stream URL (or use the pre-filled sample)
+   - Watch the preloading progress
+   - Click "Play Videos" to compare performance
+
+## Expected Results
+
+The preloaded video player should:
+- Start faster than the regular player
+- Have less initial buffering
+- Provide smoother playback experience
+- Show fewer loading interruptions
+
+The difference is most noticeable with:
+- Streams with longer segment durations
+- Slower network connections
+- Larger video files
+
+## Browser Compatibility
+
+This demo requires a browser that supports:
+- HLS.js (most modern browsers)
+- ES6+ JavaScript features
+- HTML5 video elements
+
+## Development
+
+### Project Structure
+```
+src/
+├── hooks/
+│   └── useHlsPreload.ts      # HLS preloading logic
+├── components/
+│   ├── VideoPlayer.tsx       # Video player component
+│   └── PreloadProgress.tsx   # Progress indicator
+└── routes/
+    └── index.tsx             # Main demo page
+```
+
+### Available Scripts
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run lint`: Run ESLint
+- `npm run format`: Format code with Prettier
+
+## License
+
+This project is for demonstration purposes. The HLS streams used are public test streams provided by their respective services.
