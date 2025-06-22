@@ -20,13 +20,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+        <h1 className="text-3xl font-bold text-center mb-8">
           HLS Video Player Demo
         </h1>
         
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="bg-white text-gray-800 rounded-lg shadow-lg p-6 mb-6">
           <div className="flex gap-4 mb-4">
             <input
               type="url"
@@ -38,7 +38,7 @@ function App() {
             <button
               onClick={handleLoad}
               disabled={!url.trim() || isLoading}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Loading...' : 'Load'}
             </button>
