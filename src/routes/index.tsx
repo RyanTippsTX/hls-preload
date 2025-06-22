@@ -9,14 +9,10 @@ export const Route = createFileRoute('/')({
 function App() {
   const [url, setUrl] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  
 
   const handleLoad = () => {
-    if (url.trim()) {
-      setIsLoading(true)
-      setVideoUrl(url.trim())
-      setIsLoading(false)
-    }
+    setVideoUrl(url.trim())
   }
 
   return (
@@ -37,10 +33,10 @@ function App() {
             />
             <button
               onClick={handleLoad}
-              disabled={!url.trim() || isLoading}
+              disabled={!url.trim()}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Loading...' : 'Load'}
+              {'Load'}
             </button>
           </div>
           
@@ -60,6 +56,7 @@ function App() {
               <ReactPlayer
                 url={videoUrl}
                 controls={true}
+                playing={true}
                 width="100%"
                 height="100%"
                 style={{ position: 'absolute', top: 0, left: 0 }}
