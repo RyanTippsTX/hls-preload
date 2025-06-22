@@ -35,32 +35,35 @@ export const VideoPlayer = ({
           height="100%"
           style={{ position: 'absolute', top: 0, left: 0 }}
           onPlaying={() => setOnPlayingEventFired(true)} // see note above
-
-          // config={{
-          //   file: {
-          //     forceHLS: true,
-          //     hlsOptions: {
-          //       enableWorker: true,
-          //       lowLatencyMode: false,
-          //       backBufferLength: 30,
-          //       maxBufferLength: 30,
-          //       maxMaxBufferLength: 600,
-          //       maxBufferSize: 60 * 1000 * 1000, // 60MB
-          //       maxBufferHole: 0.5,
-          //       highBufferWatchdogPeriod: 2,
-          //       nudgeOffset: 0.2,
-          //       nudgeMaxRetry: 5,
-          //       maxFragLookUpTolerance: 0.25,
-          //       liveSyncDurationCount: 3,
-          //       liveMaxLatencyDurationCount: 10,
-          //       liveDurationInfinity: true,
-          //       liveBackBufferLength: 0,
-          //       liveTolerance: 15,
-          //       progressive: false,
-          //       enableSoftwareAES: true,
-          //     },
-          //   },
-          // }}
+          config={{
+            file: {
+              forceHLS: true,
+              hlsOptions: {
+                // https://github.com/video-dev/hls.js/blob/master/docs/API.md#fine-tuning
+                maxBufferLength: 30,
+                maxMaxBufferLength: 600,
+                maxBufferSize: 60 * 1000 * 1000, // 60MB default
+                backBufferLength: Infinity,
+                frontBufferFlushThreshold: Infinity,
+                // enableWorker: true,
+                // lowLatencyMode: false,
+                // backBufferLength: 30,
+                // maxBufferSize: 60 * 1000 * 1000, // 60MB
+                // maxBufferHole: 0.5,
+                // highBufferWatchdogPeriod: 2,
+                // nudgeOffset: 0.2,
+                // nudgeMaxRetry: 5,
+                // maxFragLookUpTolerance: 0.25,
+                // liveSyncDurationCount: 3,
+                // liveMaxLatencyDurationCount: 10,
+                // liveDurationInfinity: true,
+                // liveBackBufferLength: 0,
+                // liveTolerance: 15,
+                // progressive: false,
+                // enableSoftwareAES: true,
+              },
+            },
+          }}
         />
       </div>
     </div>
