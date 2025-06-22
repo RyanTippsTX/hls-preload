@@ -10,15 +10,32 @@ function App() {
   const [url, setUrl] = useState('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
   const [videoUrl, setVideoUrl] = useState('')
   const [preloadEnabled, setPreloadEnabled] = useState(true)
+  const [loadStartTime, setLoadStartTime] = useState<number | null>(null)
+  const [playbackStartTime, setPlaybackStartTime] = useState<number | null>(null)
+  const [elapsedTime, setElapsedTime] = useState<number | null>(null)
   
 
   const handleLoad = () => {
     setVideoUrl(url.trim())
+    setLoadStartTime(Date.now())
+    setPlaybackStartTime(null)
+    setElapsedTime(null)
   }
 
   const handleReset = () => {
     setVideoUrl('')
     setUrl('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
+    setLoadStartTime(null)
+    setPlaybackStartTime(null)
+    setElapsedTime(null)
+  }
+
+  const handlePlay = () => {
+    if (loadStartTime && !playbackStartTime) {
+      const startTime = Date.now()
+      setPlaybackStartTime(startTime)
+      setElapsedTime(startTime - loadStartTime)
+    }
   }
 
   return (
@@ -66,6 +83,19 @@ function App() {
               {preloadEnabled ? 'Segments will be preloaded for smoother playback' : 'Segments will only load when needed'}
             </span>
           </div>
+
+          {loadStartTime && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="text-sm font-medium text-blue-800 mb-1">Load Timer</div>
+              <div className="text-xs text-blue-600">
+                {playbackStartTime ? (
+                  <span>Playback started in <strong>{elapsedTime}ms</strong></span>
+                ) : (
+                  <span>Waiting for playback to start...</span>
+                )}
+              </div>
+            </div>
+          )}
           
           <div className="text-sm text-gray-600">
             <p>Try these sample HLS streams:</p>
@@ -87,6 +117,7 @@ function App() {
                 width="100%"
                 height="100%"
                 style={{ position: 'absolute', top: 0, left: 0 }}
+                onPlay={handlePlay}
                 config={{
                   file: {
                     forceHLS: true,
