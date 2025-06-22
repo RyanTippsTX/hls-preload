@@ -81,27 +81,31 @@ function App() {
             </ul>
           </div> */}
 
-          <div className="flex gap-4 mb-4 items-center justify-center">
+          <div className="flex gap-4 items-center justify-center">
             <button
               onClick={handlePreload}
-              disabled={!videoSrc.trim()}
+              disabled={!videoSrc.trim() || mountPlayer}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {'Preload'}
             </button>
             <button
               onClick={handleStartVideo}
-              disabled={!videoSrc.trim()}
+              disabled={!videoSrc.trim() || showPlayer}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {'Start Video'}
             </button>
             <button
               onClick={handleReset}
-              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              className="px-6 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800 transition-colors"
             >
-              Reset Demo
+              Reset
             </button>
+          </div>
+
+          <div className="text-sm text-gray-500">
+            Check the Network tab for ".ts" files...
           </div>
         </div>
 
