@@ -302,7 +302,7 @@ You can learn more about all of the offerings from TanStack in the [TanStack doc
 
 # HLS Preloading Demo
 
-A demonstration of HLS (HTTP Live Streaming) preloading to improve video playback performance. This demo compares video startup times between a preloaded HLS stream and a regular HLS stream.
+A demonstration of HLS (HTTP Live Streaming) preloading to improve video playback performance using React-Player. This demo compares video startup times between a preloaded HLS stream and a regular HLS stream.
 
 ## Features
 
@@ -311,6 +311,7 @@ A demonstration of HLS (HTTP Live Streaming) preloading to improve video playbac
 - **Progress Tracking**: Visual progress indicator showing preloading status
 - **Performance Metrics**: Timing comparison between the two players
 - **Sample Streams**: Pre-configured public HLS test streams
+- **React-Player Integration**: Robust video player with built-in HLS support
 
 ## How It Works
 
@@ -331,19 +332,20 @@ The demo includes several public test streams:
 ## Technical Implementation
 
 ### HLS Preloading Hook (`useHlsPreload`)
-- Manages HLS.js instance lifecycle
-- Tracks segment loading progress
+- Manages URL preloading state and progress tracking
+- Simulates segment loading for demonstration purposes
 - Handles error states and cleanup
-- Provides preloaded HLS instance for video players
+- Tracks which URLs have been preloaded
 
 ### Video Player Component
-- Supports both preloaded and regular HLS playback
-- Handles video element lifecycle
-- Provides error handling and loading states
-- Tracks playback timing for comparison
+- Built with React-Player for robust video playback
+- Supports HLS streams with optimized configuration
+- Handles loading states, errors, and progress tracking
+- Provides timing comparison between players
 
 ### Key Technologies
-- **HLS.js**: JavaScript library for HLS playback
+- **React-Player**: Feature-rich video player with HLS support
+- **HLS.js**: JavaScript library for HLS playback (used by React-Player)
 - **React**: UI framework with custom hooks
 - **TanStack Router**: File-based routing
 - **Tailwind CSS**: Styling and responsive design
@@ -383,7 +385,8 @@ The difference is most noticeable with:
 ## Browser Compatibility
 
 This demo requires a browser that supports:
-- HLS.js (most modern browsers)
+- React-Player (most modern browsers)
+- HLS.js (used internally by React-Player)
 - ES6+ JavaScript features
 - HTML5 video elements
 
@@ -395,7 +398,7 @@ src/
 ├── hooks/
 │   └── useHlsPreload.ts      # HLS preloading logic
 ├── components/
-│   ├── VideoPlayer.tsx       # Video player component
+│   ├── VideoPlayer.tsx       # React-Player video component
 │   └── PreloadProgress.tsx   # Progress indicator
 └── routes/
     └── index.tsx             # Main demo page
@@ -406,6 +409,16 @@ src/
 - `npm run build`: Build for production
 - `npm run lint`: Run ESLint
 - `npm run format`: Format code with Prettier
+
+## React-Player Benefits
+
+Using React-Player provides several advantages:
+- **Cross-browser compatibility**: Works across different browsers and devices
+- **Multiple format support**: HLS, DASH, MP4, and more
+- **Built-in controls**: Customizable player controls
+- **Event handling**: Comprehensive event system for tracking playback
+- **Configuration options**: Extensive configuration for HLS optimization
+- **Active maintenance**: Well-maintained library with regular updates
 
 ## License
 

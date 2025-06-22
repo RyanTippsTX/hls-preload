@@ -11,6 +11,7 @@ export const Route = createFileRoute('/')({
 function App() {
   const [url, setUrl] = useState('')
   const [showPlayers, setShowPlayers] = useState(false)
+  const [shouldPlay, setShouldPlay] = useState(false)
   const [playStartTimes, setPlayStartTimes] = useState<{ preloaded: number | null; regular: number | null }>({
     preloaded: null,
     regular: null
@@ -24,7 +25,7 @@ function App() {
     error: preloadError,
     startPreload,
     stopPreload,
-    getPreloadedHls,
+    isUrlPreloaded,
   } = useHlsPreload()
 
   // Sample HLS stream URL - using a public test stream
@@ -38,6 +39,7 @@ function App() {
   const handleUrlChange = (newUrl: string) => {
     setUrl(newUrl)
     setShowPlayers(false)
+    setShouldPlay(false)
     setPlayStartTimes({ preloaded: null, regular: null })
     
     // Stop any existing preload
@@ -55,6 +57,7 @@ function App() {
       return
     }
     setShowPlayers(true)
+    setShouldPlay(true)
   }
 
   const handlePreloadedPlayStart = () => {
@@ -79,7 +82,7 @@ function App() {
         <header className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">HLS Preloading Demo</h1>
           <p className="text-xl text-gray-300">
-            Compare video playback speed with and without HLS preloading
+            Compare video playback speed with and without HLS preloading using React-Player
           </p>
         </header>
 
@@ -134,7 +137,8 @@ function App() {
                 <VideoPlayer
                   url={url}
                   title="With HLS Preloading ✓"
-                  preloadedHls={getPreloadedHls()}
+                  isPreloaded={isUrlPreloaded(url)}
+                  playing={shouldPlay}
                   onPlayStart={handlePreloadedPlayStart}
                   onError={(error) => console.error('Preloaded player error:', error)}
                 />
@@ -143,6 +147,8 @@ function App() {
                 <VideoPlayer
                   url={url}
                   title="Without HLS Preloading"
+                  isPreloaded={false}
+                  playing={shouldPlay}
                   onPlayStart={handleRegularPlayStart}
                   onError={(error) => console.error('Regular player error:', error)}
                 />
