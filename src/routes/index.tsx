@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { VideoPlayer } from '../components/VideoPlayer'
-import clsx from 'clsx'
 import { SegmentLoadingIndicator } from '../components/SegmentLoadingIndicator'
+import { ElapsedTimeIndicator } from '../components/ElapsedTimeIndicator'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -15,34 +15,28 @@ function App() {
   const [videoSrc, setVideoSrc] = useState(defaultUrl)
   const [mountPlayer, setMountPlayer] = useState(false)
   const [showPlayer, setShowPlayer] = useState(false)
-  const [playing, setPlaying] = useState(false)
-  const [startTime, setStartTime] = useState<Date | null>(null)
-  const [elapsedTime, setElapsedTime] = useState<number | null>(null)
-  const [isVideoStarted, setIsVideoStarted] = useState(false)
+  const [attemptStartTime, setAttemptStartTime] = useState<Date | null>(null)
+  const [playingAtTime, setPlayingAtTime] = useState<Date | null>(null)
 
-  const handlePreload = () => {
+  // Button Handlers
+  const handleClickPreload = () => {
     setMountPlayer(true)
   }
-
-  const handleStartVideo = () => {
+  const handleClickStartVideo = () => {
     setMountPlayer(true)
     setShowPlayer(true)
-    setPlaying(true)
-    setStartTime(new Date())
-    setElapsedTime(null)
-    setIsVideoStarted(false)
+    setAttemptStartTime(new Date())
   }
-
-  const handleReset = () => {
+  const handleClickReset = () => {
     window.location.reload()
   }
 
-  const handleVideoStart = () => {
-    if (startTime && !isVideoStarted) {
-      const now = new Date()
-      const elapsed = now.getTime() - startTime.getTime()
-      setElapsedTime(elapsed)
-      setIsVideoStarted(true)
+  // Video Handlers
+  const onPlaying = () => {
+    console.log('🔥 playing...')
+    if (attemptStartTime && !playingAtTime) {
+      console.log('🔥 setting playingAtTime...')
+      setPlayingAtTime(new Date())
     }
   }
 
@@ -72,21 +66,21 @@ function App() {
 
           <div className="flex gap-4 items-center justify-center">
             <button
-              onClick={handlePreload}
+              onClick={handleClickPreload}
               disabled={!videoSrc.trim() || mountPlayer}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {'Preload'}
             </button>
             <button
-              onClick={handleStartVideo}
+              onClick={handleClickStartVideo}
               disabled={!videoSrc.trim() || showPlayer}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {'Start Video'}
             </button>
             <button
-              onClick={handleReset}
+              onClick={handleClickReset}
               className="px-6 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800 transition-colors"
             >
               Reset
@@ -100,11 +94,10 @@ function App() {
         </div>
 
         {/* Elapsed Time Indicator */}
-        {startTime && (
+        {showPlayer && attemptStartTime && (
           <ElapsedTimeIndicator
-            startTime={startTime}
-            elapsedTime={elapsedTime}
-            isVideoStarted={isVideoStarted}
+            startTime={attemptStartTime}
+            playingAtTime={playingAtTime}
           />
         )}
 
@@ -112,60 +105,9 @@ function App() {
           <VideoPlayer
             videoSrc={videoSrc}
             showPlayer={showPlayer}
-            playing={playing}
-            onVideoStart={handleVideoStart}
+            onPlaying={onPlaying}
           />
         )}
-      </div>
-    </div>
-  )
-}
-
-const ElapsedTimeIndicator = ({
-  startTime,
-  elapsedTime,
-  isVideoStarted,
-}: {
-  startTime: Date
-  elapsedTime: number | null
-  isVideoStarted: boolean
-}) => {
-  const [currentElapsed, setCurrentElapsed] = useState<number>(0)
-
-  useEffect(() => {
-    if (!isVideoStarted) {
-      const interval = setInterval(() => {
-        const now = new Date()
-        const elapsed = now.getTime() - startTime.getTime()
-        setCurrentElapsed(elapsed)
-      }, 100)
-
-      return () => clearInterval(interval)
-    }
-  }, [startTime, isVideoStarted])
-
-  const displayTime = elapsedTime !== null ? elapsedTime : currentElapsed
-
-  return (
-    <div className="bg-white text-gray-800 rounded-lg shadow-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">Video Startup Latency</h2>
-
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div
-            className={clsx(
-              'w-3 h-3 rounded-full',
-              isVideoStarted ? 'bg-green-500' : 'bg-yellow-500 animate-pulse',
-            )}
-          />
-          <span className="text-sm font-medium">
-            {isVideoStarted ? 'Video Started' : 'Waiting for video...'}
-          </span>
-        </div>
-
-        <div className="text-2xl font-mono font-bold text-blue-600">
-          {(displayTime / 1000).toFixed(2)}s
-        </div>
       </div>
     </div>
   )

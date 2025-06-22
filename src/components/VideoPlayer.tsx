@@ -1,17 +1,23 @@
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
 export const VideoPlayer = ({
   videoSrc,
   showPlayer,
-  playing,
-  onVideoStart,
+  onPlaying,
 }: {
   videoSrc: string
   showPlayer: boolean
-  playing: boolean
-  onVideoStart: () => void
+  onPlaying: () => void
 }) => {
+  // ReactPlayer events are alllllllll screwed up. "onPlaying" for HLS doesn't fire unless autoplay. So I have to infer from 2 vars. I could use "onProgress" but it fires way too late.
+  const [onPlayingEventFired, setOnPlayingEventFired] = useState(false)
+  const footageIsActuallyRollingFRFR = onPlayingEventFired && showPlayer
+  useEffect(() => {
+    if (footageIsActuallyRollingFRFR) onPlaying()
+  }, [footageIsActuallyRollingFRFR])
+
   return (
     <div
       className={clsx(
@@ -24,11 +30,11 @@ export const VideoPlayer = ({
         <ReactPlayer
           url={videoSrc}
           controls={true}
-          playing={playing}
+          playing={showPlayer}
           width="100%"
           height="100%"
           style={{ position: 'absolute', top: 0, left: 0 }}
-          onPlay={onVideoStart}
+          onPlaying={() => setOnPlayingEventFired(true)} // see note above
 
           // config={{
           //   file: {
