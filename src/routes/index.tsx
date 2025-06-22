@@ -63,7 +63,7 @@ function App() {
           </div>
 
           {/* Example URLs */}
-          <div className="text-sm text-gray-600">
+          {/* <div className="text-sm text-gray-600">
             <p>Try these sample HLS streams:</p>
             <ul className="list-disc list-inside mt-2 space-y-1">
               <li>
@@ -79,7 +79,7 @@ function App() {
                 </code>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="flex gap-4 mb-4 items-center justify-center">
             <button
