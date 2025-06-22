@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { VideoPlayer } from '../components/VideoPlayer'
 import clsx from 'clsx'
+import { SegmentLoadingIndicator } from '../components/SegmentLoadingIndicator'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -69,25 +70,6 @@ function App() {
             </div>
           </div>
 
-          {/* Example URLs */}
-          {/* <div className="text-sm text-gray-600">
-            <p>Try these sample HLS streams:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>
-                Big Buck Bunny:{' '}
-                <code className="bg-gray-100 px-1 rounded">
-                  https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
-                </code>
-              </li>
-              <li>
-                Apple Test Stream:{' '}
-                <code className="bg-gray-100 px-1 rounded">
-                  https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8
-                </code>
-              </li>
-            </ul>
-          </div> */}
-
           <div className="flex gap-4 items-center justify-center">
             <button
               onClick={handlePreload}
@@ -111,9 +93,10 @@ function App() {
             </button>
           </div>
 
-          <div className="text-sm text-gray-500">
+          {/* <div className="text-sm text-gray-500">
             Check the Network tab for ".ts" files...
-          </div>
+          </div> */}
+          <SegmentLoadingIndicator />
         </div>
 
         {/* Elapsed Time Indicator */}
@@ -187,95 +170,3 @@ const ElapsedTimeIndicator = ({
     </div>
   )
 }
-
-// const SegmentLoadingIndicator = ({
-//   segmentLoading,
-//   loadedSegments,
-//   totalSegments,
-//   currentSegment,
-// }: {
-//   segmentLoading: boolean
-//   loadedSegments: Array<{ id: string; duration: number; loadedAt: Date }>
-//   totalSegments: number
-//   currentSegment: number
-// }) => {
-//   const progress =
-//     totalSegments > 0 ? (loadedSegments.length / totalSegments) * 100 : 0
-
-//   return (
-//     <div className="bg-white text-gray-800 rounded-lg shadow-lg p-6">
-//       <h2 className="text-xl font-semibold mb-4">
-//         HLS Segment Loading Progress
-//       </h2>
-
-//       {/* Loading Status */}
-//       <div className="flex items-center gap-3 mb-4">
-//         <div
-//           className={clsx(
-//             'w-3 h-3 rounded-full',
-//             segmentLoading ? 'bg-yellow-500 animate-pulse' : 'bg-gray-300',
-//           )}
-//         />
-//         <span className="text-sm font-medium">
-//           {segmentLoading ? 'Loading segments...' : 'Idle'}
-//         </span>
-//       </div>
-
-//       {/* Progress Bar */}
-//       <div className="mb-4">
-//         <div className="flex justify-between text-sm text-gray-600 mb-2">
-//           <span>
-//             Progress: {loadedSegments.length} / {totalSegments} segments
-//           </span>
-//           <span>{progress.toFixed(1)}%</span>
-//         </div>
-//         <div className="w-full bg-gray-200 rounded-full h-2">
-//           <div
-//             className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-//             style={{ width: `${progress}%` }}
-//           />
-//         </div>
-//       </div>
-
-//       {/* Recent Segments */}
-//       {loadedSegments.length > 0 && (
-//         <div>
-//           <h3 className="text-lg font-medium mb-2">Recently Loaded Segments</h3>
-//           <div className="max-h-32 overflow-y-auto space-y-1">
-//             {loadedSegments
-//               .slice(-5)
-//               .reverse()
-//               .map((segment, index) => (
-//                 <div
-//                   key={segment.id}
-//                   className="flex justify-between text-sm bg-gray-50 p-2 rounded"
-//                 >
-//                   <span>Segment {segment.id}</span>
-//                   <span className="text-gray-500">
-//                     {segment.loadedAt.toLocaleTimeString()} ({segment.duration}
-//                     s)
-//                   </span>
-//                 </div>
-//               ))}
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Stats */}
-//       <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
-//         <div className="text-center">
-//           <div className="font-bold text-blue-600">{loadedSegments.length}</div>
-//           <div className="text-gray-600">Loaded</div>
-//         </div>
-//         <div className="text-center">
-//           <div className="font-bold text-gray-600">{totalSegments}</div>
-//           <div className="text-gray-600">Total</div>
-//         </div>
-//         <div className="text-center">
-//           <div className="font-bold text-green-600">{currentSegment}</div>
-//           <div className="text-gray-600">Current</div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
