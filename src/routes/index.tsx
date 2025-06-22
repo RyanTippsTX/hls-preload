@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import ReactPlayer from 'react-player'
+import clsx from 'clsx'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -11,14 +12,18 @@ const defaultUrl =
 
 function App() {
   const [videoSrc, setVideoSrc] = useState(defaultUrl)
+  const [mountPlayer, setMountPlayer] = useState(false)
   const [showPlayer, setShowPlayer] = useState(false)
+  const [playing, setPlaying] = useState(false)
 
   const handlePreload = () => {
-    // todo
+    setMountPlayer(true)
   }
 
   const handleStartVideo = () => {
+    setMountPlayer(true)
     setShowPlayer(true)
+    setPlaying(true)
   }
 
   const handleReset = () => {
@@ -87,21 +92,40 @@ function App() {
           </div>
         </div>
 
-        {showPlayer && <VideoPlayer videoSrc={videoSrc} />}
+        {mountPlayer && (
+          <VideoPlayer
+            videoSrc={videoSrc}
+            showPlayer={showPlayer}
+            playing={playing}
+          />
+        )}
       </div>
     </div>
   )
 }
 
-const VideoPlayer = ({ videoSrc }: { videoSrc: string }) => {
+const VideoPlayer = ({
+  videoSrc,
+  showPlayer,
+  playing,
+}: {
+  videoSrc: string
+  showPlayer: boolean
+  playing: boolean
+}) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div
+      className={clsx(
+        'bg-white rounded-lg shadow-lg p-6',
+        showPlayer ? 'block' : 'hidden',
+      )}
+    >
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Video Player</h2>
       <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
         <ReactPlayer
           url={videoSrc}
           controls={true}
-          playing={true}
+          playing={playing}
           width="100%"
           height="100%"
           style={{ position: 'absolute', top: 0, left: 0 }}
