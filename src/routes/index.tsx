@@ -7,12 +7,18 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
   const [videoUrl, setVideoUrl] = useState('')
+  const [preloadEnabled, setPreloadEnabled] = useState(true)
   
 
   const handleLoad = () => {
     setVideoUrl(url.trim())
+  }
+
+  const handleReset = () => {
+    setVideoUrl('')
+    setUrl('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
   }
 
   return (
@@ -38,6 +44,27 @@ function App() {
             >
               {'Load'}
             </button>
+            <button
+              onClick={handleReset}
+              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Reset
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-4 mb-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={preloadEnabled}
+                onChange={(e) => setPreloadEnabled(e.target.checked)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium">Enable HLS Segment Preloading</span>
+            </label>
+            <span className="text-xs text-gray-500">
+              {preloadEnabled ? 'Segments will be preloaded for smoother playback' : 'Segments will only load when needed'}
+            </span>
           </div>
           
           <div className="text-sm text-gray-600">
@@ -63,6 +90,35 @@ function App() {
                 config={{
                   file: {
                     forceHLS: true,
+                    hlsOptions: {
+                      enableWorker: true,
+                      lowLatencyMode: false,
+                      backBufferLength: preloadEnabled ? 30 : 0,
+                      maxBufferLength: preloadEnabled ? 30 : 0,
+                      maxMaxBufferLength: preloadEnabled ? 600 : 0,
+                      maxBufferSize: preloadEnabled ? 60 * 1000 * 1000 : 0, // 60MB
+                      maxBufferHole: 0.5,
+                      highBufferWatchdogPeriod: 2,
+                      nudgeOffset: 0.2,
+                      nudgeMaxRetry: 5,
+                      maxFragLookUpTolerance: 0.25,
+                      liveSyncDurationCount: 3,
+                      liveMaxLatencyDurationCount: 10,
+                      liveDurationInfinity: true,
+                      liveBackBufferLength: 0,
+                      liveTolerance: 15,
+                      progressive: false,
+                      debug: false,
+                      // Preloading settings
+                      enableSoftwareAES: true,
+                      // Disable preloading when toggle is off
+                      ...(preloadEnabled ? {} : {
+                        maxBufferLength: 0,
+                        maxMaxBufferLength: 0,
+                        backBufferLength: 0,
+                        maxBufferSize: 0,
+                      })
+                    }
                   },
                 }}
                 onError={(e) => console.error('Player error:', e)}
@@ -70,6 +126,7 @@ function App() {
             </div>
             <div className="mt-4 text-sm text-gray-600">
               <p><strong>Current URL:</strong> {videoUrl}</p>
+              <p><strong>Preloading:</strong> {preloadEnabled ? 'Enabled' : 'Disabled'}</p>
             </div>
           </div>
         )}
