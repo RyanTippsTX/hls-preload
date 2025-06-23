@@ -11,6 +11,23 @@ export const Route = createFileRoute('/')({
 const defaultUrl =
   'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8'
 
+// URL encoding/decoding functions
+const encodeUrl = (url: string): string => {
+  // First base64 encode, then reverse the string to make it non-human readable
+  const base64 = btoa(url)
+  return base64.split('').reverse().join('')
+}
+
+const decodeUrl = (encoded: string): string => {
+  try {
+    // Reverse the string back, then base64 decode
+    const reversed = encoded.split('').reverse().join('')
+    return atob(reversed)
+  } catch {
+    return defaultUrl
+  }
+}
+
 function App() {
   const [videoSrc, setVideoSrc] = useState(defaultUrl)
   const [mountPlayer, setMountPlayer] = useState(false)
@@ -28,6 +45,26 @@ function App() {
     )
     setIsUnsupportedBrowser(isSafari || isMobile)
   }, [])
+
+  // Load URL from hash on mount
+  useEffect(() => {
+    const hash = window.location.hash.slice(1) // Remove the # symbol
+    if (hash) {
+      const decodedUrl = decodeUrl(hash)
+      setVideoSrc(decodedUrl)
+    }
+  }, [])
+
+  // Update URL hash when videoSrc changes
+  useEffect(() => {
+    if (videoSrc && videoSrc !== defaultUrl) {
+      const encoded = encodeUrl(videoSrc)
+      window.location.hash = encoded
+    } else if (videoSrc === defaultUrl && window.location.hash) {
+      // Clear hash if using default URL
+      window.location.hash = ''
+    }
+  }, [videoSrc])
 
   // Button Handlers
   const handleClickPreload = () => {
