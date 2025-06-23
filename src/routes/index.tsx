@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { VideoPlayer } from '../components/VideoPlayer'
 import { SegmentLoadingIndicator } from '../components/SegmentLoadingIndicator'
 import { ElapsedTimeIndicator } from '../components/ElapsedTimeIndicator'
@@ -17,6 +17,17 @@ function App() {
   const [showPlayer, setShowPlayer] = useState(false)
   const [attemptStartTime, setAttemptStartTime] = useState<Date | null>(null)
   const [playingAtTime, setPlayingAtTime] = useState<Date | null>(null)
+
+  // Detect Safari and mobile devices
+  const [isUnsupportedBrowser, setIsUnsupportedBrowser] = useState(false)
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isSafari = /safari/.test(userAgent) && !/chrome/.test(userAgent)
+    const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/.test(
+      userAgent,
+    )
+    setIsUnsupportedBrowser(isSafari || isMobile)
+  }, [])
 
   // Button Handlers
   const handleClickPreload = () => {
@@ -41,7 +52,27 @@ function App() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 relative">
+      {/* Unsupported Browser Overlay */}
+      {isUnsupportedBrowser && (
+        <div className="fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center shadow-xl">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Device Not Supported
+            </h2>
+            <p className="text-gray-600 mb-6">
+              This demo is not supported on Safari desktop or mobile devices.
+              Please use Chrome, Firefox, or Edge on desktop.
+            </p>
+            <div className="text-sm text-gray-500">
+              Safari and mobile browsers have different HLS handling that may
+              not work with this demo.
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-3xl mx-auto space-y-8">
         <h1 className="text-3xl font-bold text-center">HLS Preload Demo</h1>
 
