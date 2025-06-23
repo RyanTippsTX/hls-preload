@@ -38,7 +38,6 @@ export const VideoPlayer = ({
           config={{
             file: {
               forceHLS: true,
-              forceSafariHLS: true,
               hlsOptions: {
                 // https://github.com/video-dev/hls.js/blob/master/docs/API.md#fine-tuning
                 maxBufferLength: 30,

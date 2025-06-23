@@ -64,24 +64,24 @@ function App() {
             </div>
           </div>
 
-          <div className="flex gap-4 items-center justify-center">
+          <div className="flex gap-4 items-center justify-center flex-wrap">
             <button
               onClick={handleClickPreload}
               disabled={!videoSrc.trim() || mountPlayer}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {'Preload'}
             </button>
             <button
               onClick={handleClickStartVideo}
               disabled={!videoSrc.trim() || showPlayer}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {'Start Video'}
             </button>
             <button
               onClick={handleClickReset}
-              className="px-6 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition-colors"
+              className="px-6 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition-colors whitespace-nowrap"
             >
               Reset
             </button>
